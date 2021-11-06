@@ -21,6 +21,7 @@ client.on('ready', () => {
 let botImage = "https://i.imgur.com/lEWVxjF.png"
 let sideColor = "#d93b7e"
 let hiLoop = new Map();
+let muteMembers = new Map();
 let manageRole = "BezeqBotRoleManage"//"manage roles permission"//607889650136121365
 
 function sendMenu (message) {
@@ -36,7 +37,8 @@ function sendMenu (message) {
         { name: '&picture <@User>', value: 'Sends the avatar of the mentioned user.' },
 		// { name: '\u200B', value: '\u200B' },
         { name: '&hi <@User>', value: `Will toggle the HI loop for a given user!, Makes the user wish he wasn't born!` },
-        {name: '&help', value: 'kill you instantly IRL!'}
+        { name: '&mute <@User>', value: `Will toggle Mute&Unmute a given user!, Makes the user wish he wasn't born!` },
+        { name: '&help', value: 'kill you instantly IRL!'}
 	)
 	// .setImage('https://i.imgur.com/N6fMIYh.png')
 	.setTimestamp()
@@ -126,6 +128,17 @@ client.on('message', async (message) => {
                 else
                     await message.channel.send("You don't have the premisions to preform this action!")
                 break;
+            case "mute":
+                user = getUserFromMention(message)
+                if(user !== undefined){
+                    if(muteMembers[user.username] !== undefined){
+                        muteMembers[user.username] = !muteMembers[user.username];
+                    }
+                    else
+                        muteMembers[user.username] = true;  
+                    await message.channel.send(`${user.username} is now ${ muteMembers[user.username] ? "Muted" : "Unmuted" }!`);
+                }
+                break;
             default:
                 await message.channel.send(`There is no such command as ${command}!`)
         }
@@ -135,6 +148,10 @@ client.on('message', async (message) => {
     else if(hiLoop[message.author.username] !== undefined && hiLoop[message.author.username] !== false)
     {
         await message.channel.send(`Hi ${message.author.tag}!`)
+    }
+    else if(muteMembers[message.author.username] !== undefined && muteMembers[message.author.username] !== false)
+    {
+        await message.delete()
     }
 })
 

@@ -1,6 +1,6 @@
-# Welcome to Bezeq Bot 👋
+# Welcome to Bezeq Bot!
 
-> A discord bot. for community server.
+> A discord bot. for a Community server.
 
 ## Usage
 
